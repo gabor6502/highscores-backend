@@ -1,0 +1,15 @@
+{
+  "name": "dogs-highscores-backend",
+  "version": "1.0.0",
+  "description": "manages high scores from the dogs spinner game",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Elan Gabor",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
