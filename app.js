@@ -1,34 +1,31 @@
 import "reflect-metadata"
 import { initScoresDataSource } from './src/service/ScoreSource.js'
-import { ScoreService } from "./src/service/ScoreService.js";
+import { ScoreController } from "./src/controller/ScoreController.js";
 
 const express = require('express')
 
 const app = express();
 const PORT = 6969
 
-var scoreService = new ScoreService()
+const controller = new ScoreController()
 
-app.get('/topTenScores', async (req, res) => 
+function responseFromController(result, response)
 {
-    let jsonScores
+    response.status(result.status)
+    response.body(result.body)
+    response.json(result.json)
+}
 
-    try
-    {
-        jsonScores = await scoreService.getTopTen()
-    } catch(error)
-    {
-        res.status(500)
-        res.send(error)
-    }
+app.get('/topTenScores', async (request, response) => 
+{
+   let result = await controller.getTopTen()
 
-   res.status(200)
-   res.json(jsonScores)
-
+   responseFromController(result, response)
 })
 
 app.get('/userTopFiveScores',  async (req, res) => 
 {
+    /*
     let username = req.query.username
     let jsonUserScores
 
@@ -52,10 +49,12 @@ app.get('/userTopFiveScores',  async (req, res) =>
         res.status(400)
         res.send("No username was sent.")
     }
+    */
 })
 
 app.post('/addScore', async (req, res) => 
 {
+    /*
     if (!req.body.username)
     {
         res.status(400)
@@ -87,6 +86,7 @@ app.post('/addScore', async (req, res) =>
         res.status(200)
         res.send("score added successfuly")
     }
+        */
 })
 
 app.listen(PORT, async (error) => 
