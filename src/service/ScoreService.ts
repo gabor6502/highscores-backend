@@ -35,9 +35,11 @@ export class ScoreService
      * 
      * @description Gets the top 10 scores out of all in the database
      * 
+     * @param count Number of scores to get
+     * 
      * @returns Promise of JSON scores
      */
-    async getTopTen(): Promise<ScoreJSON[]>
+    async getTopScores(count: number): Promise<ScoreJSON[]>
     {
         let jsonScores: ScoreJSON[] = []
         let scores: Score[] = await ScoresRepository.find(
@@ -46,7 +48,7 @@ export class ScoreService
             {
                 score: "ASC"
             },
-            take: 10
+            take: count
         })
 
         this.entitiesToJSON(scores, jsonScores)
@@ -55,13 +57,14 @@ export class ScoreService
     }
 
     /**
-     * @name getTopFiveUserScores
+     * @name getTopUserScores
      * 
      * @param user the username
+     * @param count the number of scores to get
      * 
      * @returns Promise of JSON scores
      */
-    async getTopFiveUserScores(user: string): Promise<ScoreJSON[]>
+    async getTopUserScores(user: string, count: number): Promise<ScoreJSON[]>
     {
         let jsonScores: ScoreJSON[] = []
         let scores: Score[] = await ScoresRepository.find(
@@ -74,7 +77,7 @@ export class ScoreService
             {
                 score: "ASC"
             },
-            take: 5
+            take: count
         })
 
         this.entitiesToJSON(scores, jsonScores)

@@ -18,75 +18,23 @@ function responseFromController(result, response)
 
 app.get('/topTenScores', async (request, response) => 
 {
-   let result = await controller.getTopTen()
+   let result = await controller.getTopTenScores()
 
    responseFromController(result, response)
 })
 
-app.get('/userTopFiveScores',  async (req, res) => 
+app.get('/userTopFiveScores',  async (request, response) => 
 {
-    /*
-    let username = req.query.username
-    let jsonUserScores
+    let result = await controller.getTopFiveUserScores(request.query.username)
 
-    if (username)
-    {
-        try
-        {
-            jsonUserScores = await scoreService.getTopFiveUserScores(username)
-        } catch(error)
-        {
-            res.status(500)
-            res.send("Server error occured")
-            console.log(error)
-        }
-
-        res.status(200)
-        res.json(jsonUserScores)
-    }
-    else
-    {
-        res.status(400)
-        res.send("No username was sent.")
-    }
-    */
+    responseFromController(result, response)
 })
 
-app.post('/addScore', async (req, res) => 
+app.post('/addScore', async (request, response) => 
 {
-    /*
-    if (!req.body.username)
-    {
-        res.status(400)
-        res.send("Missing 'username' in body.")
-    }
+    let result = await controller.addScore(request.body.username, request.body.score, request.body.date)
 
-    if (!req.body.score)
-    {
-        res.status(400)
-        res.send("Missing 'score' in body.")
-    }
-    if (!req.body.date)
-    {
-        res.status(400)
-        res.send("Missing 'date' in body.")
-    }
-    else
-    {
-        try
-        {
-            await scoreService.addScore()
-        } catch(error)
-        {
-            res.status(500)
-            res.send("Server error occured")
-            console.log(error)
-        }
-
-        res.status(200)
-        res.send("score added successfuly")
-    }
-        */
+    responseFromController(result, response)
 })
 
 app.listen(PORT, async (error) => 
