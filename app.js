@@ -1,38 +1,92 @@
 import "reflect-metadata"
-import { ScoresDataSource } from './src/service/ScoreSource.js'
+import { initScoresDataSource } from './src/service/ScoreSource.js'
+import { ScoreService } from "./src/service/ScoreService.js";
 
 const express = require('express')
 
 const app = express();
 const PORT = 6969
 
-app.get('/topTenScores', (req, res) => 
+var scoreService = new ScoreService()
+
+app.get('/topTenScores', async (req, res) => 
 {
-    res.status(501)
-    res.send("top ten scores not implemented yet")
+    let jsonScores
+
+    try
+    {
+        jsonScores = await scoreService.getTopTen()
+    } catch(error)
+    {
+        res.status(500)
+        res.send(error)
+    }
+
+   res.status(200)
+   res.json(jsonScores)
+
 })
 
-app.get('/userScores',  (req, res) => 
+app.get('/userTopFiveScores',  async (req, res) => 
 {
     let username = req.query.username
+    let jsonUserScores
+
     if (username)
     {
-        res.status(501)
-        res.send("user scores not implemented yet")
+        try
+        {
+            jsonUserScores = await scoreService.getTopFiveUserScores(username)
+        } catch(error)
+        {
+            res.status(500)
+            res.send("Server error occured")
+            console.log(error)
+        }
+
+        res.status(200)
+        res.json(jsonUserScores)
     }
     else
     {
         res.status(400)
-        res.send("No username wwas sent.")
+        res.send("No username was sent.")
     }
 })
 
-app.post('/addScore', (req, res) => 
+app.post('/addScore', async (req, res) => 
 {
-    // expected data in body
+    if (!req.body.username)
+    {
+        res.status(400)
+        res.send("Missing 'username' in body.")
+    }
 
-    res.status(501)
-    res.send("add scores not implemented yet")
+    if (!req.body.score)
+    {
+        res.status(400)
+        res.send("Missing 'score' in body.")
+    }
+    if (!req.body.date)
+    {
+        res.status(400)
+        res.send("Missing 'date' in body.")
+    }
+    else
+    {
+        try
+        {
+            await scoreService.addScore()
+        } catch(error)
+        {
+            res.status(500)
+            res.send("Server error occured")
+            console.log(error)
+        }
+
+        res.status(200)
+        res.send("score added successfuly")
+    }
 })
 
 app.listen(PORT, async (error) => 
@@ -43,17 +97,8 @@ app.listen(PORT, async (error) =>
     }
     else
     {
-        try
-        {
-            await ScoresDataSource.initialize()
+        await initScoresDataSource()
 
-            console.log("Data source init!")
-        } catch (error)
-        {
-            console.log("FAILED to init data source")
-            console.log(error)
-        }
-    
         console.log(`Listening on port ${PORT}`)
     }
 })
