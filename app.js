@@ -1,4 +1,5 @@
 import "reflect-metadata"
+import { ScoresDataSource } from './src/service/ScoreSource.js'
 
 const express = require('express')
 
@@ -22,7 +23,7 @@ app.get('/userScores',  (req, res) =>
     else
     {
         res.status(400)
-        
+        res.send("No username wwas sent.")
     }
 })
 
@@ -34,7 +35,7 @@ app.post('/addScore', (req, res) =>
     res.send("add scores not implemented yet")
 })
 
-app.listen(PORT, (error) => 
+app.listen(PORT, async (error) => 
 {
     if (error)
     {
@@ -42,6 +43,17 @@ app.listen(PORT, (error) =>
     }
     else
     {
-        console.log(`listening on port ${PORT}`)
+        try
+        {
+            await ScoresDataSource.initialize()
+
+            console.log("Data source init!")
+        } catch (error)
+        {
+            console.log("FAILED to init data source")
+            console.log(error)
+        }
+    
+        console.log(`Listening on port ${PORT}`)
     }
 })

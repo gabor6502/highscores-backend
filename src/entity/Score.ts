@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
 
-@Entity()
+@Entity({name: 'score'})
 export class Score {
 
     private MAX_USERNAME_LENGTH: number = 256
