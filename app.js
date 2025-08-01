@@ -40,15 +40,16 @@ app.get('/scores', async (request, response) =>
 })
 
 /**
- * @name GET-userTopFiveScores
+ * @name GET-userTopScores
  * 
- * @description Gets the top 5 scores of a given username. Uses query params
+ * @description Gets the top n scores of a given username. Uses query params
  * 
  * @param username The username in question.
+ * @param count The number of their scores to get.
  */
 app.get('/userTopFiveScores',  async (request, response) => 
 {
-    let result = await controller.getTopFiveUserScores(request.query.username)
+    let result = await controller.getTopUserScores(request.query.username, request.query.count)
 
     responseFromController(result, response)
 })
