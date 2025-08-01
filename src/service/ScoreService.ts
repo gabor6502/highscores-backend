@@ -1,4 +1,3 @@
-import { ScoresRepository, ScoresManager } from './ScoreSource'
 import { Score } from '../entity/Score'
 
 // The JSON response for a score
@@ -11,6 +10,15 @@ export type ScoreJSON = {username: string, score: string, dateScored: string}
  */
 export class ScoreService
 {
+
+    private scoresRepository
+    private scoresManager
+
+    constructor(repo, manager)
+    {
+        this.scoresRepository = repo
+        this.scoresManager = manager
+    }
 
     /**
      * @name entitiesToJSON
@@ -44,7 +52,7 @@ export class ScoreService
     async getScores(pageNo: number, scoresPerPage: number): Promise<ScoreJSON[]>
     {
         let jsonScores: ScoreJSON[] = []
-        let scores: Score[] = await ScoresRepository.find(
+        let scores: Score[] = await this.scoresRepository.find(
         {
             order: 
             {
@@ -70,7 +78,7 @@ export class ScoreService
     async getTopUserScores(user: string, count: number): Promise<ScoreJSON[]>
     {
         let jsonScores: ScoreJSON[] = []
-        let scores: Score[] = await ScoresRepository.find(
+        let scores: Score[] = await this.scoresRepository.find(
         {
             where:
             {
@@ -99,6 +107,6 @@ export class ScoreService
      */
     async addScore(username: string, score: number, date: string)
     {
-        await ScoresManager.insert(Score, {username: username, score: score, dateScored: new Date(score)}) 
+        await this.scoresManager.insert(Score, {username: username, score: score, dateScored: new Date(score)}) 
     }
 }

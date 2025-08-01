@@ -9,11 +9,11 @@ type ScoresResponse = { status:number, json: ScoreJSON[] | {}, body: string }
  */
 export class ScoreController
 {
-    private scoreService
+    private scoreService: ScoreService = null
 
-    constructor()
+    constructor(service: ScoreService)
     {
-        this.scoreService = new ScoreService()
+        this.scoreService = service
     }
 
     /**
@@ -70,16 +70,16 @@ export class ScoreController
     
 
     /**
-     * @name getTopFiveUserScores
+     * @name getTopUserScores
      * 
-     * @description Gets the given user's top 5 scores from the service, assigns HTTP response
+     * @description Gets the given user's top scores from the service, assigns HTTP response
      * 
-     * @param username The username to get the top 5 scores of. If undefined, returns 400
+     * @param username The username to get the top scores of. If undefined, returns 400
      * @param count The number of their scores to get. If undefined, returns 400
      * 
      * @returns (Promise) Data ready to be put into the HTTP response
      */
-    async getTopFiveUserScores(username: string | undefined, count: number | undefined): Promise<ScoresResponse>
+    async getTopUserScores(username: string | undefined, count: number | undefined): Promise<ScoresResponse>
     {
 
         let jsonScores
@@ -89,7 +89,7 @@ export class ScoreController
         {
             try
             {
-                jsonScores = await this.scoreService.getUserScores(username, count)
+                jsonScores = await this.scoreService.getTopUserScores(username, count)
                 response.json = jsonScores
             } catch(error)
             {

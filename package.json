@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node ./build/app.js",
-    "test": "jest ./test"
+    "test": "npx jest ./test"
   },
   "author": "Elan Gabor",
   "license": "ISC",

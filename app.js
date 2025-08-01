@@ -1,13 +1,14 @@
 import "reflect-metadata"
-import { initScoresDataSource } from './src/service/ScoreSource.js'
+import { ScoresRepository, ScoresManager, initScoresDataSource } from './src/service/ScoreSource.js'
 import { ScoreController } from "./src/controller/ScoreController.js";
+import { ScoreService } from "./src/service/ScoreService.js";
 
 const express = require('express')
 
 const app = express();
 const PORT = 6969
 
-const controller = new ScoreController()
+const controller = new ScoreController(new ScoreService(ScoresRepository, ScoresManager))
 
 /**
  * @name responseFromController
