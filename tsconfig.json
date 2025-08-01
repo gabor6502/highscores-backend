@@ -1,6 +1,8 @@
 {
-   "compilerOptions": {
-      "lib": [
+   "compilerOptions": 
+   {
+      "lib": 
+      [
          "es2021"
       ],
       "target": "es2021",
@@ -10,6 +12,10 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "sourceMap": true,
-      "allowJs": true
+      "allowJs": true,
+
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
    }
 }

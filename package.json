@@ -6,11 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node ./build/app.js",
-    "test": "jest"
-  },
-  "transform": 
-  {
-    "\\.[jt]sx?$": ["babel-jest", { "excludeJestPreset": true }]
+    "test": "jest ./test"
   },
   "author": "Elan Gabor",
   "license": "ISC",
@@ -21,8 +17,10 @@
     "typeorm": "^0.3.25"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.0.15",
     "jest": "^30.0.5",
-    "typescript": "^5.8.3"
+    "ts-jest": "^29.4.0",
+    "typescript": "^5.9.2"
   }
 }
