@@ -14,9 +14,29 @@ describe("Score Controller", () =>
         controller = new ScoreController(service);
     })
 
-    //GIVEN
-    //WHEN
-    //THEN
+    it ("should insert a new score since all paramters are valid", async () => 
+    {
+        let username:string, score:number, date: string
+
+        // given
+        service.addScore.mockReturnValueOnce(Promise.resolve())
+
+        // when
+        username = "valid username"
+        score = 1234567890
+        date = "2025-08-01Z+5:00" // valid date string is YYYY-MM-DDTHH:mm:ss.sssZ. This is August 1st, 2025, CST
+
+        const result = await controller.addScore(username, score, date)
+
+        // then
+        expect(service.addScore).toHaveBeenCalledTimes(1);
+        
+        expect(result.status).toBe(201)
+
+        expect(result.body).toBeDefined()
+        expect(result.body?.length).toBeGreaterThan(0)
+        expect(result.json).toStrictEqual({})
+    })
 
 })
 

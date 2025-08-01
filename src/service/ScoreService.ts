@@ -104,9 +104,15 @@ export class ScoreService
      * @param username the username of who achieved the score
      * @param score the score acheived
      * @param date the data the score was achvieved on
+     * 
+     * @returns Promise void
      */
-    async addScore(username: string, score: number, date: string)
+    async addScore(username: string, score: number, date: string): Promise<void>
     {
-        await this.scoresManager.insert(Score, {username: username, score: score, dateScored: new Date(score)}) 
+        // date string format YYYY-MM-DDTHH:mm:ss.sssZ
+
+        // TODO scrub date string so it's in the format YYYY-MM-DDZ+/-xx:00
+
+        await this.scoresManager.insert(Score, {username: username, score: score, dateScored: new Date(date)})
     }
 }
