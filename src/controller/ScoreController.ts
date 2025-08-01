@@ -1,6 +1,6 @@
 import { ScoreJSON, ScoreService, DateFormatError } from "../service/ScoreService";
 
-type ScoresResponse = { status:number, json: ScoreJSON[] | {}, body: string }
+export type ScoresResponse = { status:number, json: ScoreJSON[] | {}, body: string }
 
 /**
  * @name ScoreController
