@@ -114,7 +114,7 @@ export class ScoreService
      * 
      * @param username the username of who achieved the score
      * @param score the score acheived
-     * @param date the data the score was achvieved on
+     * @param date the data the score was achvieved on. Must be in YYYY:MM:DDZ[+/-]##:00 format
      * 
      * @returns Promise void
      */

@@ -60,7 +60,7 @@ app.get('/userTopFiveScores',  async (request, response) =>
  * 
  * @description Adds a score into the database
  * 
- * @param body Body needs to have the username, score, and date the score was earned on
+ * @param body Body needs to have the username, score, and date the score was earned on. Date must be in format YYYY:MM:DDZ[+/-]##:00
  */
 app.post('/addScore', async (request, response) => 
 {
