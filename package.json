@@ -6,7 +6,11 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node ./build/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
+  },
+  "transform": 
+  {
+    "\\.[jt]sx?$": ["babel-jest", { "excludeJestPreset": true }]
   },
   "author": "Elan Gabor",
   "license": "ISC",
@@ -18,6 +22,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.15",
+    "jest": "^30.0.5",
     "typescript": "^5.8.3"
   }
 }

@@ -1,6 +1,7 @@
 import { ScoresRepository, ScoresManager } from './ScoreSource'
 import { Score } from '../entity/Score'
 
+// The JSON response for a score
 export type ScoreJSON = {username: string, score: string, dateScored: string}
 
 /**
