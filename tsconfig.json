@@ -14,8 +14,12 @@
       "sourceMap": true,
       "allowJs": true,
 
+      
       "esModuleInterop": true,
-      "skipLibCheck": true,
+      /*"skipLibCheck": true,
       "forceConsistentCasingInFileNames": true
-   }
+      */
+   },
+   "include": ["./src", "./app.js"],
+   "exclude": ["./test", "./jest.config.ts"]
 }
