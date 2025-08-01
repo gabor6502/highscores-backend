@@ -12,13 +12,7 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "sourceMap": true,
-      "allowJs": true,
-
-      
-      "esModuleInterop": true,
-      /*"skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
-      */
+      "allowJs": true
    },
    "include": ["./src", "./app.js"],
    "exclude": ["./test", "./jest.config.ts"]

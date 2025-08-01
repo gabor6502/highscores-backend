@@ -14,10 +14,9 @@ describe("Score Controller", () =>
         controller = new ScoreController(service);
     })
 
-    it("should say a test hello", () => 
-    {
-        console.log("HI!!!!!")
-    })
+    //GIVEN
+    //WHEN
+    //THEN
 
 })
 
