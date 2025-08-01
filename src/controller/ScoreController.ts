@@ -123,7 +123,7 @@ export class ScoreController
     }
 
     /**
-     * @name addUser
+     * @name addScore
      * 
      * @description Adds a new score into the database. If one of the expected properties is missing, HTTP status 400 is sent
      * 
@@ -133,9 +133,9 @@ export class ScoreController
      * 
      * @returns void promise
      */
-    async addUser(username: string | undefined, score: number | undefined, date: string | undefined): Promise<ScoresResponse>
+    async addScore(username: string | undefined, score: number | undefined, date: string | undefined): Promise<ScoresResponse>
     {
-        let response = {status: 200, json: {}, body: ""} // init response
+        let response = {status: 201, json: {}, body: ""} // init response (201 for resource created)
 
         if (username && score && date)
         {
@@ -148,7 +148,6 @@ export class ScoreController
                 response.body = "Server error occured"
             }
 
-            response.status = 200
             response.body = "score added successfuly"
         }
         else

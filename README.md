@@ -1,1 +1,1 @@
-# Dogs Highscores Backend (node/express, TypeORM)
+# Highscores Backend (node/express, TypeORM)
