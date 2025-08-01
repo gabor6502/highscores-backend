@@ -31,15 +31,16 @@ export class ScoreService
     }
 
     /** 
-     * @name getTopTen
+     * @name getScores
      * 
-     * @description Gets the top 10 scores out of all in the database
+     * @description Gets a certain amount of scores on a given page of the scorebook
      * 
-     * @param count Number of scores to get
+     * @param pageNo page number (first page = 0)
+     * @param scoresPerPage number of scores to put on each page
      * 
      * @returns Promise of JSON scores
      */
-    async getTopScores(count: number): Promise<ScoreJSON[]>
+    async getScores(pageNo: number, scoresPerPage: number): Promise<ScoreJSON[]>
     {
         let jsonScores: ScoreJSON[] = []
         let scores: Score[] = await ScoresRepository.find(
@@ -48,7 +49,8 @@ export class ScoreService
             {
                 score: "ASC"
             },
-            take: count
+            skip: pageNo * scoresPerPage, 
+            take: scoresPerPage,
         })
 
         this.entitiesToJSON(scores, jsonScores)

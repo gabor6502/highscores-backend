@@ -17,31 +17,57 @@ export class ScoreController
     }
 
     /**
-     * @name getTopTenScores
+     * @name getScoresPaginated
      * 
-     * @description Gets the top 10 scores from the service, assigns HTTP response
+     * @description Gets a certain number of scores per a given page
+     * 
+     * @param pageNo page number (first page = 0)
+     * @param scoresPerPage number of scores to put on each page
      * 
      * @returns (Promise) Data ready to be put into the HTTP response
      */
-    async getTopTenScores(): Promise<ScoresResponse>
+    async getScoresPaginated(pageNo: number | undefined, scoresPerPage: number | undefined): Promise<ScoresResponse>
     {
-        const NUM_SCORES = 10
-
         let jsonScores
         let response = {status: 200, json: {}, body: ""} // init response
 
-        try
-        {
-            jsonScores = await this.scoreService.getTopScores(NUM_SCORES)
-            response.json = jsonScores
-        } catch(error)
-        {
-            response.status = 500
-            response.body = error   
-        }
 
+        if (pageNo && scoresPerPage)
+        {
+            try
+            {
+               jsonScores = await this.scoreService.getScores(pageNo, scoresPerPage)
+                response.json = jsonScores
+            } catch(error)
+            {
+                response.status = 500
+                response.body = error   
+            }
+        }
+        else
+        {
+            if (pageNo == undefined)
+            {
+                response.status = 400
+                response.body = "No page number supplied."
+            }
+            if (scoresPerPage == undefined)
+            {
+                if (response.status == 400)
+                {
+                    response.body += " and no scores count per page supplied."
+                }
+                else
+                {
+                    response.status = 400
+                    response.body = "No scores count per page."
+                }
+            }
+        }
+        
         return response
     }
+    
 
     /**
      * @name getTopFiveUserScores

@@ -9,6 +9,14 @@ const PORT = 6969
 
 const controller = new ScoreController()
 
+/**
+ * @name responseFromController
+ * 
+ * @description Takes a result from the controller and sets its data in an HTTP response
+ * 
+ * @param result the result to convert
+ * @param response the repsonse to set data of
+ */
 function responseFromController(result, response)
 {
     response.status(result.status)
@@ -16,13 +24,28 @@ function responseFromController(result, response)
     response.json(result.json)
 }
 
-app.get('/topTenScores', async (request, response) => 
+/**
+ * @name GET-scores
+ * 
+ * @description Gets a page of a certain amount of scores. Uses query params
+ * 
+ * @param pageNo Page of scores to get
+ * @param scoresPerPage Number of scores to put on that page
+ */
+app.get('/scores', async (request, response) => 
 {
-   let result = await controller.getTopTenScores()
+    let result = await controller.getScoresPaginated(request.query.pageNo ,request.query.scoresPerPage);
 
-   responseFromController(result, response)
+    responseFromController(result, response)
 })
 
+/**
+ * @name GET-userTopFiveScores
+ * 
+ * @description Gets the top 5 scores of a given username. Uses query params
+ * 
+ * @param username The username in question.
+ */
 app.get('/userTopFiveScores',  async (request, response) => 
 {
     let result = await controller.getTopFiveUserScores(request.query.username)
@@ -30,6 +53,13 @@ app.get('/userTopFiveScores',  async (request, response) =>
     responseFromController(result, response)
 })
 
+/**
+ * @name POST-addScore
+ * 
+ * @description Adds a score into the database
+ * 
+ * @param body Body needs to have the username, score, and date the score was earned on
+ */
 app.post('/addScore', async (request, response) => 
 {
     let result = await controller.addScore(request.body.username, request.body.score, request.body.date)
@@ -37,6 +67,9 @@ app.post('/addScore', async (request, response) =>
     responseFromController(result, response)
 })
 
+/**
+ * @description Server starts here. Inits DB then beings listening
+ */
 app.listen(PORT, async (error) => 
 {
     if (error)
