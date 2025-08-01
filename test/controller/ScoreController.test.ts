@@ -1,7 +1,7 @@
 import { ScoreController } from "../../src/controller/ScoreController";
 import { ScoreService } from "../../src/service/ScoreService";
 
-jest.mock("./../src/service/ScoreService.ts")
+jest.mock("../../src/service/ScoreService")
 
 describe("Score Controller", () => 
 {
