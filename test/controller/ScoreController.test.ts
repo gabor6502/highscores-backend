@@ -38,5 +38,25 @@ describe("Score Controller", () =>
         expect(result.json).toStrictEqual({})
     })
 
+    it ("should fail to inserta score due to a bad username", async () => 
+    {
+        
+    })
+
+    it ("should fail to insert a score due a bad score value", async () => 
+    {
+        
+    })
+
+    it ("should fail to insert a score due a bad date value", async () => 
+    {
+        
+    })
+
+    it ("should fail to insert a score due improper date formatting", async () => 
+    {
+        
+    })
+
 })
 

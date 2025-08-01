@@ -1,4 +1,4 @@
-import { ScoreJSON, ScoreService } from "../service/ScoreService";
+import { ScoreJSON, ScoreService, DateFormatError } from "../service/ScoreService";
 
 type ScoresResponse = { status:number, json: ScoreJSON[] | {}, body: string }
 
@@ -36,7 +36,7 @@ export class ScoreController
         {
             try
             {
-               jsonScores = await this.scoreService.getScores(pageNo, scoresPerPage)
+                jsonScores = await this.scoreService.getScores(pageNo, scoresPerPage)
                 response.json = jsonScores
             } catch(error)
             {
@@ -144,8 +144,16 @@ export class ScoreController
                 await this.scoreService.addScore(username, score, date)
             } catch(error)
             {
-                response.status = 500
-                response.body = "Server error occured"
+                if (error instanceof DateFormatError)
+                {
+                    response.status = 400
+                    response.body = error.message;
+                }
+                else
+                {
+                    response.status = 500
+                    response.body = "Server error occured"
+                }
             }
 
             response.body = "score added successfuly"

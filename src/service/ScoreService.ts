@@ -3,6 +3,17 @@ import { Score } from '../entity/Score'
 // The JSON response for a score
 export type ScoreJSON = {username: string, score: string, dateScored: string}
 
+// the expected format for dates that will be put in the DB
+const DATE_REGEX = /20[2-9]\d:((0[1-9])|(1[0-2])):(([0-2][1-9])|(3[0-1]))Z[+|-](((0\d)|(1[0-2])):[0]{2})/
+
+export class DateFormatError extends Error
+{
+    constructor()
+    {
+        super("Date was not in the format YYYY:MM:DDZ[+/-]##:00")
+    }
+}
+
 /**
  * @name ScoreService
  * 
@@ -109,10 +120,13 @@ export class ScoreService
      */
     async addScore(username: string, score: number, date: string): Promise<void>
     {
-        // date string format YYYY-MM-DDTHH:mm:ss.sssZ
-
-        // TODO scrub date string so it's in the format YYYY-MM-DDZ+/-xx:00
-
-        await this.scoresManager.insert(Score, {username: username, score: score, dateScored: new Date(date)})
+        if (DATE_REGEX.test(date)) // make sure the date is appropriately formatted
+        {
+            await this.scoresManager.insert(Score, {username: username, score: score, dateScored: new Date(date)})
+        }
+        else
+        {
+            throw new DateFormatError()
+        }
     }
 }
