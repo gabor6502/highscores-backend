@@ -1,5 +1,6 @@
 import { ScoresControllerTestingPack } from "../ScoreController.test";
-import { DateFormatError } from "../../../src/service/ScoreService";
+import { DateFormatError, UsernameCharacterLimitError } from "../../../src/service/ScoreService";
+import { MAX_USERNAME_LENGTH } from "../../../src/entity/Score";
 
 export function addTests()
 {
@@ -32,6 +33,33 @@ export function addTests()
         expect(result.json).toStrictEqual({})
     })
 
+    it ("should fail to insert a score due to a username that's too long", async () =>
+    {
+        let username: string, score: number, date: string
+
+        // given
+        testPack.service.addScore.mockImplementationOnce(() => {throw new UsernameCharacterLimitError()})
+
+        // when
+        score = 40206090
+        date = "2025-08-01Z+5:00"
+        username = ""
+
+        // generate a username that's a character too long
+        for (let i = 0; i <= MAX_USERNAME_LENGTH; i++)
+        {
+            username += 'y'
+        }
+
+        const result = await testPack.controller.addScore(username, score, date)
+
+        // then
+        expect(testPack.service.addScore).toHaveBeenCalledTimes(1)
+        expect(result.body === new UsernameCharacterLimitError().message) // body should be the same as the error message
+        ScoresControllerTestingPack.expectClientError(result)
+
+    })
+
     it ("should fail to insert a score due to an undefined username", async () => 
     {
         let username: undefined, score: number, date: string
@@ -44,7 +72,7 @@ export function addTests()
         const result = await testPack.controller.addScore(username, score, date)
 
         // then
-        expect(testPack.service.addScore).toHaveBeenCalledTimes(0);
+        expect(testPack.service.addScore).toHaveBeenCalledTimes(0)
         ScoresControllerTestingPack.expectClientError(result)
     })
 
@@ -60,7 +88,7 @@ export function addTests()
         const result = await testPack.controller.addScore(username, score, date)
 
         // then
-        expect(testPack.service.addScore).toHaveBeenCalledTimes(0);
+        expect(testPack.service.addScore).toHaveBeenCalledTimes(0)
         ScoresControllerTestingPack.expectClientError(result)
     })
 
@@ -76,7 +104,7 @@ export function addTests()
         const result = await testPack.controller.addScore(username, score, date)
 
         // then
-        expect(testPack.service.addScore).toHaveBeenCalledTimes(0);
+        expect(testPack.service.addScore).toHaveBeenCalledTimes(0)
         ScoresControllerTestingPack.expectClientError(result)
     })
 
@@ -86,7 +114,7 @@ export function addTests()
         const result = await testPack.controller.addScore(undefined, undefined, undefined);
 
         // then
-        expect(testPack.service.addScore).toHaveBeenCalledTimes(0);
+        expect(testPack.service.addScore).toHaveBeenCalledTimes(0)
         ScoresControllerTestingPack.expectClientError(result)
     })
 
@@ -105,7 +133,8 @@ export function addTests()
         const result = await testPack.controller.addScore(username, score, date)
 
         // then
-        expect(testPack.service.addScore).toHaveBeenCalledTimes(1);
+        expect(testPack.service.addScore).toHaveBeenCalledTimes(1)
+        expect(result.body === new DateFormatError().message) // body should be the same as the error message
         ScoresControllerTestingPack.expectClientError(result)
     })
 
@@ -124,7 +153,8 @@ export function addTests()
         const result = await testPack.controller.addScore(username, score, date)
 
         // then
-        expect(testPack.service.addScore).toHaveBeenCalledTimes(1);
+        expect(testPack.service.addScore).toHaveBeenCalledTimes(1)
+        expect(result.body === new DateFormatError().message) // body should be the same as the error message
         ScoresControllerTestingPack.expectClientError(result)
     })
 }

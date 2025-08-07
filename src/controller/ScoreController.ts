@@ -1,4 +1,4 @@
-import { ScoreJSON, ScoreService, DateFormatError } from "../service/ScoreService";
+import { ScoreJSON, ScoreService, DateFormatError, UsernameCharacterLimitError } from "../service/ScoreService";
 
 export type ScoresResponse = { status:number, json: ScoreJSON[] | {}, body: string }
 
@@ -68,7 +68,6 @@ export class ScoreController
         return response
     }
     
-
     /**
      * @name getTopUserScores
      * 
@@ -93,8 +92,17 @@ export class ScoreController
                 response.json = jsonScores
             } catch(error)
             {
-                response.status = 500
-                response.body = error  
+                if (error instanceof UsernameCharacterLimitError)
+                {
+                    response.status = 400
+                    response.body = error.message
+                }
+                else
+                {
+                    response.status = 500
+                    response.body = "A server error occured"
+                }
+                
             }
         }
         else
@@ -144,7 +152,7 @@ export class ScoreController
                 await this.#_scoreService.addScore(username, score, date)
             } catch(error)
             {
-                if (error instanceof DateFormatError)
+                if (error instanceof DateFormatError || error instanceof UsernameCharacterLimitError)
                 {
                     response.status = 400
                     response.body = error.message;

@@ -1,4 +1,4 @@
-import { Score } from '../entity/Score'
+import { MAX_USERNAME_LENGTH, Score } from '../entity/Score'
 
 // The JSON response for a score
 export type ScoreJSON = {username: string, score: string, dateScored: string}
@@ -6,11 +6,29 @@ export type ScoreJSON = {username: string, score: string, dateScored: string}
 // the expected format for dates that will be put in the DB
 const DATE_REGEX = /20[2-9]\d:((0[1-9])|(1[0-2])):(([0-2][1-9])|(3[0-1]))Z[+|-](((0\d)|(1[0-2])):[0]{2})/
 
+/**
+ * @name UsernameCharacterLimitError
+ * 
+ * @description Thrown when a username provided is too long
+ */
+export class UsernameCharacterLimitError extends Error
+{
+    constructor()
+    {
+        super(`Username exceeds character limit of ${MAX_USERNAME_LENGTH}`)
+    }
+}
+
+/**
+ * @name DateFormatError
+ * 
+ * @description Thrown when a date is formatted improperly
+ */
 export class DateFormatError extends Error
 {
     constructor()
     {
-        super("Date was not in the format YYYY:MM:DDZ[+/-]##:00")
+        super("Date was not in the format 'YYYY:MM:DDZ[+/-]##:00'")
     }
 }
 
@@ -89,7 +107,14 @@ export class ScoreService
     async getTopUserScores(user: string, count: number): Promise<ScoreJSON[]>
     {
         let jsonScores: ScoreJSON[] = []
-        let scores: Score[] = await this.#_scoresRepository.find(
+        let scores: Score[]
+
+        if (user.length > MAX_USERNAME_LENGTH)
+        {
+            throw new UsernameCharacterLimitError()
+        }
+        
+        scores = await this.#_scoresRepository.find(
         {
             where:
             {
@@ -120,13 +145,17 @@ export class ScoreService
      */
     async addScore(username: string, score: number, date: string): Promise<void>
     {
-        if (DATE_REGEX.test(date)) // make sure the date is appropriately formatted
+        if (username.length > MAX_USERNAME_LENGTH)
         {
-            await this.#_scoresManager.insert(Score, {username: username, score: score, dateScored: new Date(date)})
+            throw new UsernameCharacterLimitError()
+        }
+        else if (DATE_REGEX.test(date)) // make sure the date is appropriately formatted
+        {
+            throw new DateFormatError()
         }
         else
         {
-            throw new DateFormatError()
+            await this.#_scoresManager.insert(Score, {username: username, score: score, dateScored: new Date(date)})
         }
     }
 }
