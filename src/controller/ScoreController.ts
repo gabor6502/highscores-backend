@@ -124,7 +124,6 @@ export class ScoreController
                     response.body = "No score count was sent"
                 }
             }
-            
         }
 
         return response
