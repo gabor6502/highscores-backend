@@ -1,7 +1,7 @@
 import { MAX_USERNAME_LENGTH, Score } from '../entity/Score'
 
 // The JSON response for a score
-export type ScoreJSON = {username: string, score: string, dateScored: string}
+export type ScoreJSON = {username: string, score: number, dateScored: string}
 
 // the expected format for dates that will be put in the DB
 const DATE_REGEX = /20[2-9]\d:((0[1-9])|(1[0-2])):(([0-2][1-9])|(3[0-1]))Z[+|-](((0\d)|(1[0-2])):[0]{2})/
@@ -62,7 +62,7 @@ export class ScoreService
         entities.forEach((entity, index) => 
         {
             jsonEnts[index] = { username: entity.username,
-                                score: entity.score+'',
+                                score: entity.score,
                                 dateScored: entity.dateScored.toDateString()
                               }
         })
