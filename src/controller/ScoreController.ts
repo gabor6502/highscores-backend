@@ -9,11 +9,11 @@ export type ScoresResponse = { status:number, json: ScoreJSON[] | {}, body: stri
  */
 export class ScoreController
 {
-    private scoreService: ScoreService = null
+    #_scoreService: ScoreService = null
 
     constructor(service: ScoreService)
     {
-        this.scoreService = service
+        this.#_scoreService = service
     }
 
     /**
@@ -36,7 +36,7 @@ export class ScoreController
         {
             try
             {
-                jsonScores = await this.scoreService.getScores(pageNo, scoresPerPage)
+                jsonScores = await this.#_scoreService.getScores(pageNo, scoresPerPage)
                 response.json = jsonScores
             } catch(error)
             {
@@ -89,7 +89,7 @@ export class ScoreController
         {
             try
             {
-                jsonScores = await this.scoreService.getTopUserScores(username, count)
+                jsonScores = await this.#_scoreService.getTopUserScores(username, count)
                 response.json = jsonScores
             } catch(error)
             {
@@ -141,7 +141,7 @@ export class ScoreController
         {
             try
             {
-                await this.scoreService.addScore(username, score, date)
+                await this.#_scoreService.addScore(username, score, date)
             } catch(error)
             {
                 if (error instanceof DateFormatError)
@@ -193,5 +193,5 @@ export class ScoreController
 
         return response
     }
-
+    
 }

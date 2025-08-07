@@ -22,13 +22,13 @@ export class DateFormatError extends Error
 export class ScoreService
 {
 
-    private scoresRepository
-    private scoresManager
+    #_scoresRepository
+    #_scoresManager
 
     constructor(repo, manager)
     {
-        this.scoresRepository = repo
-        this.scoresManager = manager
+        this.#_scoresRepository = repo
+        this.#_scoresManager = manager
     }
 
     /**
@@ -63,7 +63,7 @@ export class ScoreService
     async getScores(pageNo: number, scoresPerPage: number): Promise<ScoreJSON[]>
     {
         let jsonScores: ScoreJSON[] = []
-        let scores: Score[] = await this.scoresRepository.find(
+        let scores: Score[] = await this.#_scoresRepository.find(
         {
             order: 
             {
@@ -89,7 +89,7 @@ export class ScoreService
     async getTopUserScores(user: string, count: number): Promise<ScoreJSON[]>
     {
         let jsonScores: ScoreJSON[] = []
-        let scores: Score[] = await this.scoresRepository.find(
+        let scores: Score[] = await this.#_scoresRepository.find(
         {
             where:
             {
@@ -122,7 +122,7 @@ export class ScoreService
     {
         if (DATE_REGEX.test(date)) // make sure the date is appropriately formatted
         {
-            await this.scoresManager.insert(Score, {username: username, score: score, dateScored: new Date(date)})
+            await this.#_scoresManager.insert(Score, {username: username, score: score, dateScored: new Date(date)})
         }
         else
         {
